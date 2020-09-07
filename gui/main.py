@@ -1,5 +1,5 @@
 import pygame
-from button import button
+from .button import button
 
 def playgame():
     pygame.init()
@@ -9,63 +9,93 @@ def playgame():
     HEIGHT = 800
 
     background = pygame.display.set_mode((HEIGHT, WIDTH))
-    background.fill((255,255,255))
+    
 
     # this function draws the png
     def drawMan(integer):
-        num = str((integer + 7) % 8)
+        num = str((integer + 6) % 7)
         image = pygame.image.load('assets/hangman%s.png' %num)
-        pygame.transform.scale(image, (10,10))
-        background.blit(image, (400,200))
+        image = pygame.transform.scale(image, (300,400))
+        background.blit(image, (80,30))
 
 
-    startScreen = True
+    difficultyScreen = True
     nextScreen = False
+    endScreen = False
 
     EASY = button((200,200,200), WIDTH/2 - 75, HEIGHT/2 -250, 200,100, "EASY")
     MEDIUM = button((200,200,200), WIDTH/2 - 75, HEIGHT/2 -125, 200,100, "MEDIUM")
     HARD = button((200,200,200), WIDTH/2 - 75, HEIGHT/2, 200, 100, "HARD")
 
-    def defaultColor():
-        EASY.color = (200,200,200)
-        MEDIUM.color = (200,200,200)
-        HARD.color = (200,200,200)
 
-    while difficultyScreen:
+    while difficultyScreen or nextScreen or endScreen:
         
-        EASY.draw(background, (0,0,0))
-        MEDIUM.draw(background, (0,0,0))
-        HARD.draw(background, (0,0,0))
         
+        #chances used
         chance = 0
 
-        # drawMan(chance)
+        def defaultColor():
+            EASY.color = (200,200,200)
+            MEDIUM.color = (200,200,200)
+            HARD.color = (200,200,200)
 
-        pygame.time.Clock().tick(30)
-        pygame.display.update()
+        # this will emulate the selection process
+        while difficultyScreen:
+            pygame.time.Clock().tick(30)
+            pygame.display.update()
+            background.fill((255,255,255))
+            
+            EASY.draw(background, (0,0,0))
+            MEDIUM.draw(background, (0,0,0))
+            HARD.draw(background, (0,0,0))
+            
 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    difficultyScreen = False
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                difficultyScreen = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if EASY.isOver(pygame.mouse.get_pos()):
+                        difficultyScreen = False
+                        nextScreen = True
+                        pygame.display.flip()
+                    elif HARD.isOver(pygame.mouse.get_pos()):
+                        HARD.color = (100,100,100)
+                        pygame.display.flip()
+                    elif MEDIUM.isOver(pygame.mouse.get_pos()):
+                        MEDIUM.color = (100,100,100)
+                        pygame.display.flip()
+                    
+                if event.type == pygame.MOUSEMOTION:
+                    if EASY.isOver(pygame.mouse.get_pos()):
+                        EASY.color = (100,100,100)
+                    elif HARD.isOver(pygame.mouse.get_pos()):
+                        HARD.color = (100,100,100)
+                    elif MEDIUM.isOver(pygame.mouse.get_pos()):
+                        MEDIUM.color = (100,100,100)
+                    else:
+                        defaultColor()
+        
+        while nextScreen:
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                print(pygame.mouse.get_pos())
+            pygame.time.Clock().tick(30)
+            pygame.display.update()
+            background.fill((255,255,255))
+
+            drawMan(chance)
+
+            for event in pygame.event.get():
                 
-            if event.type == pygame.MOUSEMOTION:
-                if EASY.isOver(pygame.mouse.get_pos()):
-                    EASY.color = (100,100,100)
-                elif HARD.isOver(pygame.mouse.get_pos()):
-                    HARD.color = (100,100,100)
-                elif MEDIUM.isOver(pygame.mouse.get_pos()):
-                    MEDIUM.color = (100,100,100)
-                else:
-                    defaultColor()
-    
-    while nextScreen:
-        pass
+                if event.type == pygame.QUIT:
+                    nextScreen = False
+                
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    chance+= 1
+                    # nextScreen = False
+                    # difficultyScreen = True
+                    # pygame.display.flip()
+
+        
         
 
     pygame.quit()
-
-playgame()
