@@ -9,6 +9,7 @@ def playgame():
     pygame.init()
     pygame.display.set_caption("Hangman by Skazitron")
 
+    VictoryOrLoss = pygame.font.SysFont("Times New Roman", 50)
 
     WIDTH = 800
     HEIGHT = 800
@@ -33,7 +34,6 @@ def playgame():
 
     difficultyScreen = True
     nextScreen = False
-    endScreen = False
     definition_button = button((200,200,200), WIDTH*3/4 + 20, HEIGHT/8, 100, 100, "DEF")
     play_again_button = button((200,200,200), WIDTH*3/4 - 150, HEIGHT/8, 140, 100, "AGAIN")
 
@@ -42,12 +42,13 @@ def playgame():
     HARD = button((200,200,200), WIDTH/2 - 75, HEIGHT/2, 200, 100, "HARD")
 
 
-    while difficultyScreen or nextScreen or endScreen:
+    while difficultyScreen or nextScreen:
 
         # font for the word
         font = pygame.font.SysFont("Times New Roman, Arial", 40)
         definition = pygame.font.SysFont("Arial", 15)
-        
+        VictoryFont = VictoryOrLoss.render("You Won!", True, (0,255,0))
+        LossFont = VictoryOrLoss.render("You Lost :(", True, (255,0,0))
         displayOrNot = False
 
         #chances used
@@ -131,7 +132,7 @@ def playgame():
         while nextScreen:
             
             if chance >= 7:
-
+                background.blit(LossFont, (WIDTH* 2/4 + 75, 15))
                 string = someword[:-1]
 
  
@@ -143,6 +144,8 @@ def playgame():
                         string+= letter + ' '
                     else:
                         string+= '_ '
+                if string[:-1].lower() == someword[:-1]:
+                    background.blit(VictoryFont,(WIDTH* 2/4 + 75, 15))
 
                     
 
@@ -191,7 +194,7 @@ def playgame():
                             letter[3] = False
                             guessed.append(letturr.lower())
                             if not letturr.lower() in someword:
-                                chance+=1
+                                if chance < 7: chance+=1
 
 
                     if play_again_button.isOver(pygame.mouse.get_pos()):
