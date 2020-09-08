@@ -107,6 +107,8 @@ def playgame():
         # main game screen 
         someword = wordSelector(difficulty)
         lettersTaken = wordScrambler(difficulty)
+
+
         #meaning = dictionary(someword)
         startx = round((WIDTH - (radius * 2 + gap)*13)/2)
         starty = 550
@@ -117,15 +119,9 @@ def playgame():
         alphabetArray = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
         
-        string = ""
+        victoryCondition = False
+
         
-        def completeString(someArray):
-            string = ""
-            for letter in someword[:-1]:
-                if not letter in someArray:
-                    string+= "_ "
-                else:
-                    string+= letter + " "
 
         for i in range(26):
                 x = startx + gap * 2 + ((radius * 2  + gap) * (i%13))
@@ -134,8 +130,29 @@ def playgame():
 
         while nextScreen:
             
-            completeString(guessed)
-            stringFont = font.render(string.upper()[:-1], False, (0,0,0))
+            if chance >= 7:
+
+                string = someword[:-1]
+
+ 
+
+            if chance < 7:
+                string = ""
+                for letter in someword[:-1]:
+                    if letter.lower() in guessed:
+                        string+= letter + ' '
+                    else:
+                        string+= '_ '
+
+                    
+
+            # for letter in someword[:-1]:
+            #     if not letter in guessed:
+            #         string+= "_ "
+            #     else:
+            #         string+= letter + " "
+
+            stringFont = font.render(string.upper(), False, (0,0,0))
 
             for letter in letters:
                 x,y, letturr, isVisible = letter
@@ -172,8 +189,8 @@ def playgame():
                         dis = math.sqrt(((x - m_x)**2)+ ((y-m_y)**2))
                         if dis < radius:
                             letter[3] = False
-                            guessed.append(letturr)
-                            if not letturr in someword:
+                            guessed.append(letturr.lower())
+                            if not letturr.lower() in someword:
                                 chance+=1
 
 
