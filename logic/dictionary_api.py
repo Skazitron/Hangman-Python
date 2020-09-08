@@ -1,5 +1,4 @@
 import json
-from pprint import pprint
 import requests
 
 
@@ -9,8 +8,6 @@ class dictionary:
 
     def1 = None
     example1 = None
-    def2 = None
-    example2 = None
 
     def __init__(self, word_id):
         super().__init__()
@@ -26,15 +23,6 @@ class dictionary:
     
     def getExample1(self):
         return self.word1['example']
-
-    def getDef2(self):
-        if self.word2:
-            self.def2 = self.word2['definition']
-    
-    def getExample2(self):
-        if self.word2:
-            self.def2 = self.word2['example']
-    
 
 
     

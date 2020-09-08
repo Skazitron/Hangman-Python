@@ -1,24 +1,18 @@
-from txt_parser import wordSelector
-from dictionary_api import dictionary
+import random as rand
 
-usrIn = (input("What's difficulty do you want? (Easy, Medium, Hard): ")).lower()
-
-while usrIn not in ['easy', 'medium', 'hard']:
-    
-    if usrIn == 'q': break
-
-    usrIn = input("Please enter a valid difficulty: ")
-
-userWord = wordSelector(usrIn)
-
-print(userWord)
-
-try:
-    var1 = dictionary(userWord)
-    print(var1.getDef1())
-    print(var1.getExample1())
-
-except IndexError:
-    print("Not Found. Sorry :(")
-except KeyError:
-    print("Not Found. Sorry :(")
+def wordScrambler(difficulty):
+    array = []
+    resArray = []
+    if difficulty == 'easy':
+        for i in range(0,2):
+            array.append(rand.randint(0,25))
+    if difficulty == 'medium':
+        for i in range(0,3):
+            array.append(rand.randint(0,25))
+    if difficulty == 'hard':
+        for i in range(0,4):
+            array.append(rand.randint(0,25))
+    alphabetArray = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    for i in array:
+        resArray.append(alphabetArray[i])
+    return resArray
